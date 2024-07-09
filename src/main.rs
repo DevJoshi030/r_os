@@ -30,6 +30,7 @@ pub extern "C" fn _start() -> ! {
   test_main();
 
   println!("It did not crash!");
+
   // #[allow(clippy::empty_loop)]
   // loop {
   //   use r_os::print;
