@@ -6,14 +6,13 @@
 
 use core::panic::PanicInfo;
 
-use r_os::println;
+use r_os::{hlt_loop, println};
 
 #[no_mangle] // don't mangle the name of this function
 pub extern "C" fn _start() -> ! {
   test_main();
 
-  #[allow(clippy::empty_loop)]
-  loop {}
+  hlt_loop();
 }
 
 #[panic_handler]

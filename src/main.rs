@@ -5,7 +5,7 @@
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
-use r_os::println;
+use r_os::{hlt_loop, println};
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
@@ -30,8 +30,13 @@ pub extern "C" fn _start() -> ! {
   test_main();
 
   println!("It did not crash!");
-  #[allow(clippy::empty_loop)]
-  loop {}
+  // #[allow(clippy::empty_loop)]
+  // loop {
+  //   use r_os::print;
+  //   print!("-");
+  // }
+
+  hlt_loop();
 }
 
 /// This function is called on panic.
@@ -40,8 +45,7 @@ pub extern "C" fn _start() -> ! {
 fn panic(info: &PanicInfo) -> ! {
   println!("{}", info);
 
-  #[allow(clippy::empty_loop)]
-  loop {}
+  hlt_loop();
 }
 
 #[cfg(test)]

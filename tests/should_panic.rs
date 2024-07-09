@@ -2,7 +2,7 @@
 #![no_main]
 
 use core::panic::PanicInfo;
-use r_os::{exit_qemu, serial_print, serial_println, QemuExitCode};
+use r_os::{exit_qemu, hlt_loop, serial_print, serial_println, QemuExitCode};
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
@@ -10,8 +10,7 @@ pub extern "C" fn _start() -> ! {
   serial_println!("[test did not panic]");
   exit_qemu(QemuExitCode::Failed);
 
-  #[allow(clippy::empty_loop)]
-  loop {}
+  hlt_loop();
 }
 
 fn should_fail() {
@@ -24,6 +23,5 @@ fn panic(_info: &PanicInfo) -> ! {
   serial_println!("[ok]");
   exit_qemu(QemuExitCode::Success);
 
-  #[allow(clippy::empty_loop)]
-  loop {}
+  hlt_loop();
 }
