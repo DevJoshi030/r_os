@@ -2,6 +2,7 @@
 name = "r_os"
 version = "0.1.0"
 edition = "2021"
+autotests = false
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -33,4 +34,8 @@ harness = false
 
 [[test]]
 name = "stack_overflow"
+harness = false
+
+[[test]]
+name = "basic_boot"
 harness = false

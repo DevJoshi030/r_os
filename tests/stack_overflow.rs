@@ -4,7 +4,10 @@
 
 use core::panic::PanicInfo;
 
-use r_os::{exit_qemu, hlt_loop, serial_print, serial_println, QemuExitCode};
+use r_os::{
+  hlt_loop, serial_print, serial_println,
+  testing::{exit_qemu, QemuExitCode},
+};
 
 use lazy_static::lazy_static;
 use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
@@ -58,5 +61,5 @@ fn stack_overflow() {
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-  r_os::test_panic_handler(info)
+  r_os::testing::test_panic_handler(info)
 }

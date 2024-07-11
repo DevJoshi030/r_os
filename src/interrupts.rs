@@ -114,7 +114,14 @@ extern "x86-interrupt" fn keyboard_interrupt_handler(_stack_frame: InterruptStac
   }
 }
 
-#[test_case]
-fn test_breakpoint_exception() {
-  x86_64::instructions::interrupts::int3();
+#[cfg(test)]
+pub mod tests {
+
+  fn test_breakpoint_exception() {
+    x86_64::instructions::interrupts::int3();
+  }
+
+  pub fn tests() {
+    crate::testing::test_runner(&[&test_breakpoint_exception]);
+  }
 }

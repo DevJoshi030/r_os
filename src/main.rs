@@ -1,11 +1,9 @@
 #![no_std]
 #![no_main]
 #![feature(custom_test_frameworks)]
-#![test_runner(r_os::test_runner)]
-#![reexport_test_harness_main = "test_main"]
+#![test_runner(r_os::testing::test_runner)]
 
 use bootloader::{entry_point, BootInfo};
-use core::panic::PanicInfo;
 use r_os::{hlt_loop, memory::active_level_4_table, println};
 
 entry_point!(kernel_main);
@@ -68,7 +66,7 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
   }
 
   #[cfg(test)]
-  test_main();
+  r_os::testing::test_runner(&[]);
 
   println!("It did not crash!");
 
@@ -84,14 +82,19 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
 /// This function is called on panic.
 #[cfg(not(test))]
 #[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
+fn panic(info: &core::panic::PanicInfo) -> ! {
   println!("{}", info);
 
   hlt_loop();
 }
 
 #[cfg(test)]
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-  r_os::test_panic_handler(info)
+mod tests {
+
+  use core::panic::PanicInfo;
+
+  #[panic_handler]
+  fn panic(info: &PanicInfo) -> ! {
+    r_os::testing::test_panic_handler(info)
+  }
 }
