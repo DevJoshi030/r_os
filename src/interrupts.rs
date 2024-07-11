@@ -121,7 +121,7 @@ pub mod tests {
     x86_64::instructions::interrupts::int3();
   }
 
-  pub fn tests() {
-    crate::testing::test_runner(&[&test_breakpoint_exception]);
+  pub fn tests(exit: bool) {
+    crate::testing::runner(&[&test_breakpoint_exception], exit);
   }
 }

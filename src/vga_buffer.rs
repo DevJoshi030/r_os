@@ -173,11 +173,14 @@ pub mod tests {
     });
   }
 
-  pub fn tests() {
-    crate::testing::test_runner(&[
-      &test_println_simple,
-      &test_println_many,
-      &test_println_output,
-    ]);
+  pub fn tests(exit: bool) {
+    crate::testing::runner(
+      &[
+        &test_println_simple,
+        &test_println_many,
+        &test_println_output,
+      ],
+      exit,
+    );
   }
 }

@@ -60,12 +60,19 @@ pub mod testing {
     }
   }
 
-  pub fn test_runner(tests: &[&dyn Testable]) {
+  pub fn runner(tests: &[&dyn Testable], exit: bool) {
     serial_println!("Running {} tests", tests.len());
     for test in tests {
       test.run();
     }
-    exit_qemu(QemuExitCode::Success);
+
+    if exit {
+      exit_qemu(QemuExitCode::Success);
+    }
+  }
+
+  pub fn test_runner(tests: &[&dyn Testable]) {
+    runner(tests, true);
   }
 
   pub fn test_panic_handler(info: &PanicInfo) -> ! {
@@ -96,16 +103,14 @@ mod tests {
 
     init();
 
-    // crate::testing::test_runner(&[&vga_buffer_tests, &interrupts_tests]);
-
     run_tests();
 
     hlt_loop();
   }
 
   fn run_tests() {
-    vga_buffer_tests();
-    interrupts_tests();
+    vga_buffer_tests(false);
+    interrupts_tests(true);
   }
 
   #[panic_handler]
