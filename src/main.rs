@@ -4,12 +4,12 @@
 #![test_runner(r_os::testing::test_runner)]
 
 use bootloader::{entry_point, BootInfo};
-use r_os::{hlt_loop, println};
+use r_os::{hlt_loop, memory, println};
+use x86_64::structures::paging::Translate;
 
 entry_point!(kernel_main);
 
 fn kernel_main(boot_info: &'static BootInfo) -> ! {
-  use r_os::memory::translate_addr;
   use x86_64::VirtAddr;
 
   println!("Hello World{}", "!");
@@ -79,9 +79,11 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     boot_info.physical_memory_offset,
   ];
 
+  let mapper = unsafe { memory::init(phys_mem_offset) };
+
   for &address in &addresses {
     let virt = VirtAddr::new(address);
-    let phys = unsafe { translate_addr(virt, phys_mem_offset) };
+    let phys = mapper.translate_addr(virt);
 
     println!("{:?} -> {:?}", virt, phys);
   }
