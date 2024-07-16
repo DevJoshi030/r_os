@@ -88,8 +88,8 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
   //   println!("{:?} -> {:?}", virt, phys);
   // }
 
-  let mut frame_allocator = memory::EmptyFrameAllocator;
-  let page = Page::containing_address(VirtAddr::new(0));
+  let mut frame_allocator = unsafe { memory::BootInfoFrameAllocator::new(&boot_info.memory_map) };
+  let page = Page::containing_address(VirtAddr::new(0xdead_beaf));
   memory::create_example_mapping(page, &mut mapper, &mut frame_allocator);
 
   let page_ptr: *mut u64 = page.start_address().as_mut_ptr();
